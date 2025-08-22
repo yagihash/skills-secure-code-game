@@ -15,13 +15,14 @@ const openai = new OpenAI({ baseURL: "https://models.github.ai/inference", apiKe
 
 export async function sendUserMessageToLLM(systemMessage, userPrompt, log = true) {
     try {
-        const completion = await openai.chat.completions.create({
+        const completionStr = await openai.chat.completions.create({
             model: "openai/gpt-4.1-nano",
             messages: [
                 { role: "system", content: systemMessage },
                 { role: "user", content: userPrompt }
             ],
         });
+        const completion = JSON.parse(completionStr)
         const response = completion.choices[0].message?.content || "";
         if (log) console.log("Model response:", response, '\n');
         return response;
